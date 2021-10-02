@@ -72,3 +72,11 @@ fabric.properties
 
 # Created java archive
 Mars.jar
+
+# Packed macOS Apps and iconsets
+*.app
+*.iconset
+*.icns
+
+# Mac Folder layout metadata
+.DS_Store
