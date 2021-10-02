@@ -21,7 +21,7 @@ if [[ "$_java" ]]; then
         javac -cp ".:lib/*" $(find . -name "*.java")
     else
         echo "Attempting to compile Mars with java-10"
-        find . -name "*.java" | xargs /usr/lib/jvm/java-10/bin/javac
+        /usr/lib/jvm/java-10/bin/javac -cp ".:lib/*" $(find . -name "*.java")
     fi
 fi
 
