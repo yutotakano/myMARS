@@ -233,10 +233,9 @@ public class VenusUI extends JFrame {
                     "Open a file for editing", KeyEvent.VK_O,
                     KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
-            fileReloadAction = new FileReloadAction("Reload",
-                    null,
-                    "Reload current file", new Integer(KeyEvent.VK_R),
-                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | ActionEvent.SHIFT_MASK),
+            fileReloadAction = new FileReloadAction("Reload", null,
+                    "Reload current file", KeyEvent.VK_R,
+                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | ActionEvent.SHIFT_MASK),
                     mainUI);
             fileCloseAction = new FileCloseAction("Close", null,
                     "Close the current file", KeyEvent.VK_C,
@@ -253,7 +252,7 @@ public class VenusUI extends JFrame {
             fileSaveAsAction = new FileSaveAsAction("Save As…",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "SaveAs22.png"))),
                     "Save current file with different name", KeyEvent.VK_A,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | ActionEvent.SHIFT_MASK), mainUI);
+                    KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx() | ActionEvent.SHIFT_MASK), mainUI);
             fileSaveAllAction = new FileSaveAllAction("Save All", null,
                     "Save all open files", KeyEvent.VK_V,
                     null, mainUI);
@@ -304,12 +303,12 @@ public class VenusUI extends JFrame {
             runAssembleAction = new RunAssembleAction("Assemble",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Assemble22.png"))),
                     "Assemble the current file and clear breakpoints", KeyEvent.VK_A,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
             runGoAction = new RunGoAction("Go",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Play22.png"))),
                     "Run the current program", KeyEvent.VK_G,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
             runStepAction = new RunStepAction("Step",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "StepForward22.png"))),
@@ -344,7 +343,7 @@ public class VenusUI extends JFrame {
                     mainUI);
             runToggleBreakpointsAction = new RunToggleBreakpointsAction("Toggle all breakpoints",
                     null,
-                    "Disable/enable all breakpoints without clearing (can also click Bkpt column header)",
+                    "Disable/enable all breakpoints without clearing (can also click Breakpoint (Br) column header)",
                     KeyEvent.VK_T,
                     KeyStroke.getKeyStroke(KeyEvent.VK_T, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
