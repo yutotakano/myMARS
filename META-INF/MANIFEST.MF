@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Created-By: 1.8.0_181 (Oracle Corporation)
-Class-Path: .
+Class-Path: lib/flatlaf-1.6.jar
 Main-Class: Mars

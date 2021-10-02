@@ -11,6 +11,8 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.*;
 
+import com.formdev.flatlaf.FlatLightLaf;
+
 /*
 Copyright (c) 2003-2012,  Pete Sanderson and Kenneth Vollmar
 
@@ -242,6 +244,7 @@ public class MarsLaunch {
                 () -> {
                     //Turn off metal's use of bold fonts
                     //UIManager.put("swing.boldMetal", Boolean.FALSE);
+                    FlatLightLaf.setup();
                     new VenusUI("MARS " + Globals.version);
                 });
     }
