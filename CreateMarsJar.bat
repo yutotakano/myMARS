@@ -29,7 +29,7 @@ for /f "delims=.-_ tokens=1-2" %%v in ("%JAVA_VERSION%") do (
 if %JAVA_VERSION% > 9 (
     echo "Compiling Mars with default javac"
     dir /s /B *.java > sources.txt
-    javac @sources.txt
+    javac -encoding utf8 @sources.txt
     jar cfm Mars.jar META-INF/MANIFEST.MF README.md LICENSE.md PseudoOps.txt Config.properties Syscall.properties Settings.properties MipsXRayOpcode.xml registerDatapath.xml controlDatapath.xml ALUcontrolDatapath.xml CreateMarsJar.bat CreateMarsJar.sh Mars.java Mars.class docs help images mars
 ) else (
     echo "Could not find an appropriate Java installation"
