@@ -40,6 +40,11 @@ This project is a fork of MARS 4.5. Pull requests are very much welcomed.
 ## How to compile
  - **Windows**: execute "CreateMarsJar.bat" file to generate an executable.
  - **GNU/Linux** and **Mac**: execute "CreateMarsJar.sh" to generate a java archive. If you can't due to permissions, run `chmod +x CreateMarsJar.sh`.
+ - **Mac App**: you can also package MARS as a macOS Application package (.app).
+   - Install XCode.
+   - Clone [saagarjha/GenerateAppIcons](https://github.com/saagarjha/GenerateAppIcons) somewhere.
+   - Without cd-ing into GenerateAppIcons, run `xcodebuild -project GenerateAppIcons/GenerateAppIcons.xcodeproj/ -scheme GenerateAppIcons CODE_SIGNING_ALLOWED=NO`.
+   - Now you can use "CreateMarsApp.sh" to generate an App package that you can copy to your Applications folder.
 
 ## How to release
 
