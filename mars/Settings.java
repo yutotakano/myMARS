@@ -1075,6 +1075,7 @@ public class Settings extends Observable {
      * @deprecated Use <code>setBooleanSetting(int id, boolean value)</code> with the appropriate boolean setting ID
      * (e.g. <code>Settings.WARNINGS_ARE_ERRORS</code>)
      */
+    @Deprecated
     public void setWarningsAreErrors(boolean value) {
         internalSetBooleanSetting(WARNINGS_ARE_ERRORS, value);
     }
