@@ -26,7 +26,7 @@ for /f "delims=.-_ tokens=1-2" %%v in ("%JAVA_VERSION%") do (
   )
 )
 
-if %JAVA_VERSION% > 9 (
+if %JAVA_VERSION% GTR 9 (
     echo Compiling Mars with default javac...
     dir /s /B *.java > sources.txt
     javac -encoding utf8 @sources.txt
