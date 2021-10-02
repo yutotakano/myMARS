@@ -17,23 +17,23 @@ Copyright (c) 2003-2010,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -323,7 +323,7 @@ class EditTabbedPane extends JTabbedPane {
     private File saveAsFile(EditPane editPane) {
         File theFile = null;
         if (editPane != null) {
-            JFileChooser saveDialog;
+            FileDialog saveDialog;
             boolean operationOK = false;
             while (!operationOK) {
                 // Set Save As dialog directory in a logical way.  If file in
@@ -331,21 +331,26 @@ class EditTabbedPane extends JTabbedPane {
                 // If a new file (mipsN.asm), default to current save directory.
                 // DPS 13-July-2011
                 if (editPane.isNew()) {
-                    saveDialog = new JFileChooser(editor.getCurrentSaveDirectory());
+                    saveDialog = new FileDialog(mainUI, "Save As", FileDialog.SAVE);
+                    saveDialog.setDirectory(editor.getCurrentSaveDirectory());
                 } else {
-                    File f = new File(editPane.getPathname());
-                    saveDialog = new JFileChooser(f.getParent());
+                    if (editPane.getPathname() != null) {
+						File f = new File(editPane.getPathname());
+						saveDialog = new FileDialog(mainUI, "Save As", FileDialog.SAVE);
+						saveDialog.setDirectory(f.getParent());
+					} else {
+						saveDialog = new FileDialog(mainUI, "Save As", FileDialog.SAVE);
+						saveDialog.setDirectory(editor.getCurrentSaveDirectory());
+					}
                 }
                 String paneFile = editPane.getFilename();
-                if (paneFile != null) saveDialog.setSelectedFile(new File(paneFile));
-                // end of 13-July-2011 code.
-                saveDialog.setDialogTitle("Save As");
+                if (paneFile != null) saveDialog.setFile(paneFile);
 
-                int decision = saveDialog.showSaveDialog(mainUI);
-                if (decision != JFileChooser.APPROVE_OPTION) {
+                saveDialog.setVisible(true);
+				if (saveDialog.getFile() == null) {
                     return null;
                 }
-                theFile = saveDialog.getSelectedFile();
+                theFile = new File(saveDialog.getDirectory() + saveDialog.getFile());
                 operationOK = true;
                 if (theFile.exists()) {
                     int overwrite = JOptionPane.showConfirmDialog(mainUI,
@@ -366,7 +371,7 @@ class EditTabbedPane extends JTabbedPane {
                     }
                 }
             }
-            // Either file with selected name does not exist or user wants to 
+            // Either file with selected name does not exist or user wants to
             // overwrite it, so go for it!
             try {
                 BufferedWriter outFileStream = new BufferedWriter(new FileWriter(theFile));
@@ -511,25 +516,13 @@ class EditTabbedPane extends JTabbedPane {
 
     private class FileOpener {
         private File mostRecentlyOpenedFile;
-        private final JFileChooser fileChooser;
-        private int fileFilterCount;
-        private final ArrayList fileFilterList;
-        private final PropertyChangeListener listenForUserAddedFileFilter;
+        private FileDialog fileDialog;
         private final Editor theEditor;
 
         FileOpener(Editor theEditor) {
             this.mostRecentlyOpenedFile = null;
             this.theEditor = theEditor;
-            this.fileChooser = new JFileChooser();
-            this.listenForUserAddedFileFilter = new ChoosableFileFilterChangeListener();
-            this.fileChooser.addPropertyChangeListener(this.listenForUserAddedFileFilter);
-
-            // Note: add sequence is significant - last one added becomes default.
-            fileFilterList = new ArrayList();
-            fileFilterList.add(fileChooser.getAcceptAllFileFilter());
-            fileFilterList.add(FilenameFinder.getFileFilter(Globals.fileExtensions, "Assembler Files", true));
-            fileFilterCount = 0; // this will trigger fileChooser file filter load in next line
-            setChoosableFileFilters();
+            this.fileDialog = new FileDialog(mainUI, "Open", FileDialog.LOAD);
         }
 
         /*
@@ -538,20 +531,19 @@ class EditTabbedPane extends JTabbedPane {
         private void openFile() {
             // The fileChooser's list may be rebuilt from the master ArrayList if a new filter
             // has been added by the user.
-            setChoosableFileFilters();
             // get name of file to be opened and load contents into text editing area.
-            fileChooser.setCurrentDirectory(new File(theEditor.getCurrentOpenDirectory()));
+            fileDialog.setDirectory(theEditor.getCurrentOpenDirectory());
             // Set default to previous file opened, if any.  This is useful in conjunction
             // with option to assemble file automatically upon opening.  File likely to have
             // been edited externally (e.g. by Mipster).
             if (Globals.getSettings().getBooleanSetting(Settings.ASSEMBLE_ON_OPEN_ENABLED) && mostRecentlyOpenedFile != null) {
-                fileChooser.setSelectedFile(mostRecentlyOpenedFile);
+                fileDialog.setFile(mostRecentlyOpenedFile.getPath());
             }
 
-            if (fileChooser.showOpenDialog(mainUI) == JFileChooser.APPROVE_OPTION) {
-                File theFile = fileChooser.getSelectedFile();
+            fileDialog.setVisible(true);
+            if (fileDialog.getFile() != null) {
+                File theFile = new File(fileDialog.getDirectory() + fileDialog.getFile());
                 theEditor.setCurrentOpenDirectory(theFile.getParent());
-                //theEditor.setCurrentSaveDirectory(theFile.getParent());// 13-July-2011 DPS.
                 if (!openFile(theFile)) {
                     return;
                 }
@@ -563,7 +555,7 @@ class EditTabbedPane extends JTabbedPane {
                 }
             }
         }
-      
+
        /*
         * Open the specified file.  Return true if file opened, false otherwise
         */
@@ -638,69 +630,5 @@ class EditTabbedPane extends JTabbedPane {
             }
             return true;
         }
-
-        // Private method to generate the file chooser's list of choosable file filters.
-        // It is called when the file chooser is created, and called again each time the Open
-        // dialog is activated.  We do this because the user may have added a new filter
-        // during the previous dialog.  This can be done by entering e.g. *.txt in the file
-        // name text field.  Java is funny, however, in that if the user does this then
-        // cancels the dialog, the new filter will remain in the list BUT if the user does
-        // this then ACCEPTS the dialog, the new filter will NOT remain in the list.  However
-        // the act of entering it causes a property change event to occur, and we have a
-        // handler that will add the new filter to our internal filter list and "restore" it
-        // the next time this method is called.  Strangely, if the user then similarly
-        // adds yet another new filter, the new one becomes simply a description change
-        // to the previous one, the previous object is modified AND NO PROPERTY CHANGE EVENT
-        // IS FIRED!  I could obviously deal with this situation if I wanted to, but enough
-        // is enough.  The limit will be one alternative filter at a time.
-        // DPS... 9 July 2008
-
-        private void setChoosableFileFilters() {
-            // See if a new filter has been added to the master list.  If so,
-            // regenerate the fileChooser list from the master list.
-            if (fileFilterCount < fileFilterList.size() ||
-                    fileFilterList.size() != fileChooser.getChoosableFileFilters().length) {
-                fileFilterCount = fileFilterList.size();
-                // First, "deactivate" the listener, because our addChoosableFileFilter
-                // calls would otherwise activate it!  We want it to be triggered only
-                // by MARS user action.
-                boolean activeListener = false;
-                if (fileChooser.getPropertyChangeListeners().length > 0) {
-                    fileChooser.removePropertyChangeListener(listenForUserAddedFileFilter);
-                    activeListener = true;  // we'll note this, for re-activation later
-                }
-                // clear out the list and populate from our own ArrayList.
-                // Last one added becomes the default.
-                fileChooser.resetChoosableFileFilters();
-                for (Object aFileFilterList : fileFilterList) {
-                    fileChooser.addChoosableFileFilter((FileFilter) aFileFilterList);
-                }
-                // Restore listener.
-                if (activeListener) {
-                    fileChooser.addPropertyChangeListener(listenForUserAddedFileFilter);
-                }
-            }
-        }//////////////////////////////////////////////////////////////////////////////////
-        //  Private inner class for special property change listener.  DPS 9 July 2008.
-        //  If user adds a file filter, e.g. by typing *.txt into the file text field then pressing
-        //  Enter, then it is automatically added to the array of choosable file filters.  BUT, unless you
-        //  Cancel out of the Open dialog, it is then REMOVED from the list automatically also. Here
-        //  we will achieve a sort of persistence at least through the current activation of MARS.
-
-        private class ChoosableFileFilterChangeListener implements PropertyChangeListener {
-            public void propertyChange(java.beans.PropertyChangeEvent e) {
-                if (Objects.equals(e.getPropertyName(), JFileChooser.CHOOSABLE_FILE_FILTER_CHANGED_PROPERTY)) {
-                    FileFilter[] newFilters = (FileFilter[]) e.getNewValue();
-                    FileFilter[] oldFilters = (FileFilter[]) e.getOldValue();
-                    if (newFilters.length > fileFilterList.size()) {
-                        // new filter added, so add to end of master list.
-                        fileFilterList.add(newFilters[newFilters.length - 1]);
-                    }
-                }
-            }
-        }
-
-
     }
-
 }

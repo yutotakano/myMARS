@@ -4,6 +4,7 @@ import mars.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.desktop.*;
 import java.awt.event.*;
 import java.net.*;
 
@@ -13,23 +14,23 @@ Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -72,8 +73,8 @@ public class VenusUI extends JFrame {
     // shared between a menu item and its corresponding toolbar button.  This is a very cool
     // technique because it relates the button and menu item so closely
 
-    private Action fileNewAction, fileOpenAction, fileCloseAction, fileCloseAllAction, fileSaveAction;
-    private Action fileSaveAsAction, fileSaveAllAction, fileDumpMemoryAction, filePrintAction, fileExitAction;
+    private Action fileNewAction, fileOpenAction, fileReloadAction, fileCloseAction, fileCloseAllAction, fileSaveAction;
+    private Action fileSaveAsAction, fileSaveAllAction, fileDumpMemoryAction, filePrintAction;
     EditUndoAction editUndoAction;
     EditRedoAction editRedoAction;
     private Action editCutAction, editCopyAction, editPasteAction, editFindReplaceAction, editSelectAllAction;
@@ -102,11 +103,11 @@ public class VenusUI extends JFrame {
         double screenWidth = Toolkit.getDefaultToolkit().getScreenSize().getWidth();
         double screenHeight = Toolkit.getDefaultToolkit().getScreenSize().getHeight();
         // basically give up some screen space if running at 800 x 600
-        double messageWidthPct = (screenWidth < 1000.0) ? 0.67 : 0.73;
+        double messageWidthPct = (screenWidth < 1000.0) ? 0.67 : 0.92;
         double messageHeightPct = (screenWidth < 1000.0) ? 0.12 : 0.15;
-        double mainWidthPct = (screenWidth < 1000.0) ? 0.67 : 0.73;
-        double mainHeightPct = (screenWidth < 1000.0) ? 0.60 : 0.65;
-        double registersWidthPct = (screenWidth < 1000.0) ? 0.18 : 0.22;
+        double mainWidthPct = (screenWidth < 1000.0) ? 0.67 : 0.92;
+        double mainHeightPct = (screenWidth < 1000.0) ? 0.60 : 0.60;
+        double registersWidthPct = (screenWidth < 1000.0) ? 0.18 : 0.05;
         double registersHeightPct = (screenWidth < 1000.0) ? 0.72 : 0.80;
 
         Dimension messagesPanePreferredSize = new Dimension((int) (screenWidth * messageWidthPct), (int) (screenHeight * messageHeightPct));
@@ -227,10 +228,15 @@ public class VenusUI extends JFrame {
                     "Create a new file for editing", KeyEvent.VK_N,
                     KeyStroke.getKeyStroke(KeyEvent.VK_N, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
-            fileOpenAction = new FileOpenAction("Open ...",
+            fileOpenAction = new FileOpenAction("Open…",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Open22.png"))),
                     "Open a file for editing", KeyEvent.VK_O,
                     KeyStroke.getKeyStroke(KeyEvent.VK_O, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
+                    mainUI);
+            fileReloadAction = new FileReloadAction("Reload",
+                    null,
+                    "Reload current file", new Integer(KeyEvent.VK_R),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | ActionEvent.SHIFT_MASK),
                     mainUI);
             fileCloseAction = new FileCloseAction("Close", null,
                     "Close the current file", KeyEvent.VK_C,
@@ -244,26 +250,22 @@ public class VenusUI extends JFrame {
                     "Save the current file", KeyEvent.VK_S,
                     KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
-            fileSaveAsAction = new FileSaveAsAction("Save as ...",
+            fileSaveAsAction = new FileSaveAsAction("Save As…",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "SaveAs22.png"))),
                     "Save current file with different name", KeyEvent.VK_A,
-                    null, mainUI);
+                    KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | ActionEvent.SHIFT_MASK), mainUI);
             fileSaveAllAction = new FileSaveAllAction("Save All", null,
                     "Save all open files", KeyEvent.VK_V,
                     null, mainUI);
-            fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory ...",
+            fileDumpMemoryAction = new FileDumpMemoryAction("Dump Memory…",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Dump22.png"))),
                     "Dump machine code or data in an available format", KeyEvent.VK_D,
                     KeyStroke.getKeyStroke(KeyEvent.VK_D, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
                     mainUI);
-            filePrintAction = new FilePrintAction("Print ...",
+            filePrintAction = new FilePrintAction("Print…",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Print22.gif"))),
                     "Print current file", KeyEvent.VK_P,
                     null, mainUI);
-            fileExitAction = new FileExitAction("Exit", null,
-                    "Exit Mars", KeyEvent.VK_Q,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_Q,Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()),
-                    mainUI);
             editUndoAction = new EditUndoAction("Undo",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Undo22.png"))),
                     "Undo last edit", KeyEvent.VK_U,
@@ -302,12 +304,12 @@ public class VenusUI extends JFrame {
             runAssembleAction = new RunAssembleAction("Assemble",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Assemble22.png"))),
                     "Assemble the current file and clear breakpoints", KeyEvent.VK_A,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_F3, 0),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     mainUI);
             runGoAction = new RunGoAction("Go",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Play22.png"))),
                     "Run the current program", KeyEvent.VK_G,
-                    KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0),
+                    KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()),
                     mainUI);
             runStepAction = new RunStepAction("Step",
                     new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "StepForward22.png"))),
@@ -407,22 +409,22 @@ public class VenusUI extends JFrame {
                     "If set, the MIPS program can write and branch to both text and data segments.",
                     null, null,
                     mainUI);
-            settingsEditorAction = new SettingsEditorAction("Editor...",
+            settingsEditorAction = new SettingsEditorAction("Editor…",
                     null,
                     "View and modify text editor settings.",
                     null, null,
                     mainUI);
-            settingsHighlightingAction = new SettingsHighlightingAction("Highlighting...",
+            settingsHighlightingAction = new SettingsHighlightingAction("Highlighting…",
                     null,
                     "View and modify Execute Tab highlighting colors",
                     null, null,
                     mainUI);
-            settingsExceptionHandlerAction = new SettingsExceptionHandlerAction("Exception Handler...",
+            settingsExceptionHandlerAction = new SettingsExceptionHandlerAction("Exception Handler…",
                     null,
                     "If set, the specified exception handler file will be included in all Assemble operations.",
                     null, null,
                     mainUI);
-            settingsMemoryConfigurationAction = new SettingsMemoryConfigurationAction("Memory Configuration...",
+            settingsMemoryConfigurationAction = new SettingsMemoryConfigurationAction("Memory Configuration…",
                     null,
                     "View and modify memory segment base addresses for simulated MIPS.",
                     null, null,
@@ -432,15 +434,16 @@ public class VenusUI extends JFrame {
                     "Help", KeyEvent.VK_H,
                     KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0),
                     mainUI);
-            helpAboutAction = new HelpAboutAction("About ...", null,
+            helpAboutAction = new HelpAboutAction("About…", null,
                     "Information about Mars", null, null, mainUI);
+			Desktop.getDesktop().setAboutHandler((AboutHandler)helpAboutAction);
         } catch (NullPointerException e) {
             System.out.println("Internal Error: images folder not found, or other null pointer exception while creating Action objects");
             e.printStackTrace();
             System.exit(0);
         }
     }
-   
+
     /*
      * build the menus and connect them to action objects (which serve as action listeners
      * shared between menu item and corresponding toolbar icon).
@@ -470,6 +473,7 @@ public class VenusUI extends JFrame {
         fileNew.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "New16.png"))));
         JMenuItem fileOpen = new JMenuItem(fileOpenAction);
         fileOpen.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Open16.png"))));
+		JMenuItem fileReload = new JMenuItem(fileReloadAction);
         JMenuItem fileClose = new JMenuItem(fileCloseAction);
         fileClose.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
         JMenuItem fileCloseAll = new JMenuItem(fileCloseAllAction);
@@ -484,10 +488,9 @@ public class VenusUI extends JFrame {
         fileDumpMemory.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Dump16.png"))));
         JMenuItem filePrint = new JMenuItem(filePrintAction);
         filePrint.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Print16.gif"))));
-        JMenuItem fileExit = new JMenuItem(fileExitAction);
-        fileExit.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
         file.add(fileNew);
         file.add(fileOpen);
+        file.add(fileReload);
         file.add(fileClose);
         file.add(fileCloseAll);
         file.addSeparator();
@@ -499,8 +502,6 @@ public class VenusUI extends JFrame {
         }
         file.addSeparator();
         file.add(filePrint);
-        file.addSeparator();
-        file.add(fileExit);
 
         JMenuItem editUndo = new JMenuItem(editUndoAction);
         editUndo.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Undo16.png"))));//"Undo16.gif"))));
@@ -611,11 +612,7 @@ public class VenusUI extends JFrame {
 
         JMenuItem helpHelp = new JMenuItem(helpHelpAction);
         helpHelp.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Help16.png"))));//"Help16.gif"))));
-        JMenuItem helpAbout = new JMenuItem(helpAboutAction);
-        helpAbout.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
         help.add(helpHelp);
-        help.addSeparator();
-        help.add(helpAbout);
 
         menuBar.add(file);
         menuBar.add(edit);
@@ -630,7 +627,7 @@ public class VenusUI extends JFrame {
 
         return menuBar;
     }
-   
+
     /*
      * build the toolbar and connect items to action objects (which serve as action listeners
      * shared between toolbar icon and corresponding menu item).
@@ -716,7 +713,7 @@ public class VenusUI extends JFrame {
     }
 
 
-    /* Determine from FileStatus what the menu state (enabled/disabled)should 
+    /* Determine from FileStatus what the menu state (enabled/disabled)should
      * be then call the appropriate method to set it.  Current states are:
      *
      * setMenuStateInitial: set upon startup and after File->Close
@@ -765,6 +762,7 @@ public class VenusUI extends JFrame {
     private void setMenuStateInitial() {
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(false);
         fileCloseAction.setEnabled(false);
         fileCloseAllAction.setEnabled(false);
         fileSaveAction.setEnabled(false);
@@ -772,7 +770,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(false);
         fileDumpMemoryAction.setEnabled(false);
         filePrintAction.setEnabled(false);
-        fileExitAction.setEnabled(true);
         editUndoAction.setEnabled(false);
         editRedoAction.setEnabled(false);
         editCutAction.setEnabled(false);
@@ -804,6 +801,7 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager*/
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
         fileCloseAction.setEnabled(true);
         fileCloseAllAction.setEnabled(true);
         fileSaveAction.setEnabled(true);
@@ -811,7 +809,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(true);
         fileDumpMemoryAction.setEnabled(false);
         filePrintAction.setEnabled(true);
-        fileExitAction.setEnabled(true);
         editCutAction.setEnabled(true);
         editCopyAction.setEnabled(true);
         editPasteAction.setEnabled(true);
@@ -843,6 +840,8 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager*/
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
         fileCloseAction.setEnabled(true);
         fileCloseAllAction.setEnabled(true);
         fileSaveAction.setEnabled(true);
@@ -850,7 +849,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(true);
         fileDumpMemoryAction.setEnabled(false);
         filePrintAction.setEnabled(true);
-        fileExitAction.setEnabled(true);
         editCutAction.setEnabled(true);
         editCopyAction.setEnabled(true);
         editPasteAction.setEnabled(true);
@@ -879,6 +877,7 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager*/
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
         fileCloseAction.setEnabled(true);
         fileCloseAllAction.setEnabled(true);
         fileSaveAction.setEnabled(true);
@@ -886,7 +885,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(true);
         fileDumpMemoryAction.setEnabled(false);
         filePrintAction.setEnabled(true);
-        fileExitAction.setEnabled(true);
         editCutAction.setEnabled(true);
         editCopyAction.setEnabled(true);
         editPasteAction.setEnabled(true);
@@ -915,6 +913,7 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager */
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
         fileCloseAction.setEnabled(true);
         fileCloseAllAction.setEnabled(true);
         fileSaveAction.setEnabled(true);
@@ -922,7 +921,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(true);
         fileDumpMemoryAction.setEnabled(true);
         filePrintAction.setEnabled(true);
-        fileExitAction.setEnabled(true);
         editCutAction.setEnabled(true);
         editCopyAction.setEnabled(true);
         editPasteAction.setEnabled(true);
@@ -951,6 +949,7 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager */
         fileNewAction.setEnabled(false);
         fileOpenAction.setEnabled(false);
+		fileReloadAction.setEnabled(false);
         fileCloseAction.setEnabled(false);
         fileCloseAllAction.setEnabled(false);
         fileSaveAction.setEnabled(false);
@@ -958,7 +957,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(false);
         fileDumpMemoryAction.setEnabled(false);
         filePrintAction.setEnabled(false);
-        fileExitAction.setEnabled(false);
         editCutAction.setEnabled(false);
         editCopyAction.setEnabled(false);
         editPasteAction.setEnabled(false);
@@ -986,6 +984,7 @@ public class VenusUI extends JFrame {
       /* Note: undo and redo are handled separately by the undo manager */
         fileNewAction.setEnabled(true);
         fileOpenAction.setEnabled(true);
+		fileReloadAction.setEnabled(true);
         fileCloseAction.setEnabled(true);
         fileCloseAllAction.setEnabled(true);
         fileSaveAction.setEnabled(true);
@@ -993,7 +992,6 @@ public class VenusUI extends JFrame {
         fileSaveAllAction.setEnabled(true);
         fileDumpMemoryAction.setEnabled(true);
         filePrintAction.setEnabled(true);
-        fileExitAction.setEnabled(true);
         editCutAction.setEnabled(true);
         editCopyAction.setEnabled(true);
         editPasteAction.setEnabled(true);

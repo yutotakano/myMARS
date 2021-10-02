@@ -58,8 +58,8 @@ public class RegistersWindow extends JPanel implements Observer {
     private static final int UTF16_COLUMN = 3;
     private static final int NOTE_COLUMN = 4;
 
-    private static final int NAME_COLUMN_WIDTH = 50;
-    private static final int NUMBER_COLUMN_WIDTH = 40;
+    private static final int NAME_COLUMN_WIDTH = 40;
+    private static final int NUMBER_COLUMN_WIDTH = 30;
     private static final int VALUE_COLUMN_WIDTH = 80;
     private static final int UTF16_COLUMN_WIDTH = 60;
     private static final int NOTE_COLUMN_WIDTH = 30;

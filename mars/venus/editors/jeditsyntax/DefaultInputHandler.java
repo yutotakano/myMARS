@@ -35,7 +35,9 @@ public class DefaultInputHandler extends InputHandler {
      */
     public void addDefaultKeyBindings() {
         addKeyBinding("BACK_SPACE", BACKSPACE);
+        addKeyBinding("C+H", BACKSPACE);
         addKeyBinding("C+BACK_SPACE", BACKSPACE_WORD);
+        addKeyBinding("C+D", DELETE);
         addKeyBinding("DELETE", DELETE);
         addKeyBinding("C+DELETE", DELETE_WORD);
 
@@ -48,14 +50,22 @@ public class DefaultInputHandler extends InputHandler {
         addKeyBinding("HOME", HOME);
         addKeyBinding("END", END);
         addKeyBinding("C+A", SELECT_ALL);
+        addKeyBinding("M+RIGHT", END);
+        addKeyBinding("C+E", END);
+        addKeyBinding("M+A", SELECT_ALL);
         addKeyBinding("S+HOME", SELECT_HOME);
+        addKeyBinding("MS+LEFT", SELECT_HOME);
+        addKeyBinding("CS+A", SELECT_HOME);
+        addKeyBinding("MS+RIGHT", SELECT_END);
         addKeyBinding("S+END", SELECT_END);
-        addKeyBinding("C+HOME", DOCUMENT_HOME);
-        addKeyBinding("C+END", DOCUMENT_END);
-        addKeyBinding("CS+HOME", SELECT_DOC_HOME);
-        addKeyBinding("CS+END", SELECT_DOC_END);
+        addKeyBinding("CS+E", SELECT_END);
+        addKeyBinding("M+UP", DOCUMENT_HOME);
+        addKeyBinding("M+DOWN", DOCUMENT_END);
+        addKeyBinding("MS+UP", SELECT_DOC_HOME);
+        addKeyBinding("MS+DOWN", SELECT_HOME);
 
         addKeyBinding("PAGE_UP", PREV_PAGE);
+        addKeyBinding("M+LEFT", PREV_PAGE);
         addKeyBinding("PAGE_DOWN", NEXT_PAGE);
         addKeyBinding("S+PAGE_UP", SELECT_PREV_PAGE);
         addKeyBinding("S+PAGE_DOWN", SELECT_NEXT_PAGE);
@@ -69,16 +79,20 @@ public class DefaultInputHandler extends InputHandler {
         addKeyBinding("C+RIGHT", NEXT_WORD);
         addKeyBinding("CS+RIGHT", SELECT_NEXT_WORD);
         addKeyBinding("UP", PREV_LINE);
+        addKeyBinding("C+P", PREV_LINE);
         addKeyBinding("S+UP", SELECT_PREV_LINE);
+        addKeyBinding("CS+P", PREV_LINE);
         addKeyBinding("DOWN", NEXT_LINE);
+        addKeyBinding("C+N", NEXT_LINE);
         addKeyBinding("S+DOWN", SELECT_NEXT_LINE);
+        addKeyBinding("CS+N", NEXT_LINE);
 
         addKeyBinding("C+ENTER", REPEAT);
 
         // Clipboard
-        addKeyBinding("C+C", CLIP_COPY);
-        addKeyBinding("C+V", CLIP_PASTE);
-        addKeyBinding("C+X", CLIP_CUT);
+        addKeyBinding("M+C", CLIP_COPY);
+        addKeyBinding("M+V", CLIP_PASTE);
+        addKeyBinding("M+X", CLIP_CUT);
     }
 
     /**

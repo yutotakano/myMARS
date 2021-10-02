@@ -18,23 +18,23 @@ Copyright (c) 2003-2013,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -57,7 +57,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
     private final JPanel tablePanel;
     private JButton dataButton, nextButton, prevButton, stakButton, globButton, heapButton, kernButton, extnButton, mmioButton, textButton;
 
-    private static final int VALUES_PER_ROW = 8;
+    private static final int VALUES_PER_ROW = 4; // changed to 4 from 8 in https://github.com/saagarjha/MARS/commit/6ebfa7c4e2690f95ace68234b0b373908e416373?branch=6ebfa7c4e2690f95ace68234b0b373908e416373&diff=unified
     private static final int NUMBER_OF_ROWS = 16;  // with 8 value columns, this shows 512 bytes;
     private static final int NUMBER_OF_COLUMNS = VALUES_PER_ROW + 1;// 1 for address and 8 for values
     private static final int BYTES_PER_VALUE = 4;
@@ -101,6 +101,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
     public DataSegmentWindow(NumberDisplayBaseChooser[] choosers) {
         super("Data Segment", true, false, true, true);
 
+        putClientProperty("JInternalFrame.frameType", "normal");
         Simulator.getInstance().addObserver(this);
         settings = Globals.getSettings();
         settings.addObserver(this);
@@ -880,8 +881,8 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
         }
 
         /*
-         * The cells in the Address column are not editable.  
-      	* Value cells are editable except when displayed 
+         * The cells in the Address column are not editable.
+      	* Value cells are editable except when displayed
       	* in ASCII view - don't want to give the impression
       	* that ASCII text can be entered directly because
       	* it can't.  It is possible but not worth the
@@ -896,7 +897,7 @@ public class DataSegmentWindow extends JInternalFrame implements Observer {
 
         /*
          * JTable uses this method to determine the default renderer/
-         * editor for each cell.  
+         * editor for each cell.
          */
         public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();

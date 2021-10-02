@@ -3,6 +3,22 @@
 
 MARS has been jointly developed by [Pete Sanderson][4] (programming) and [Ken Vollmar][5] (details and paperwork).
 
+This is a fork of [qaisjp/myMARS](https://github.com/qaisjp/myMARS) which contains fixes and nifty additions (like UTF-16 hints), with changes merged from [saagarjha/MARS](https://github.com/saagarjha/MARS) which contains Mac-specific useful fixes.
+
+Things this fork does better than the original MARS V4.5:
+
+- Use native macOS menu bar for actions instead of clunky Java UI (from saagarjha's fork).
+  - ![Image showing macOS menu bar](https://i.imgur.com/nRV9XgN.png)
+- Also shown above: a Reload menu button to reload the open file without closing and opening again. (from saagarjha's fork)
+- Change hardcoded Launch Screen shown time from 2 seconds to 250ms (from qaisjp's fork)
+- Change the dock icon, left is new (from saagarjha's fork)
+  - ![Image showing dock icon](https://i.imgur.com/1dMiUiL.png)
+- Add `@Deprecated` to all deprecated functions, removing the warnings during compilation (from saagarjha's fork).
+- Use the native file dialog for macOS, left is new (from saagarjha's fork)
+  - ![Image showing native file opener](https://i.imgur.com/xdwFFId.png)
+- Show UTF-16 encoding of register values (from qaisjp's fork)
+- And a whole lot of other fixes by Vidminas, qaisjp, JonMoncrieff, and ZayadNimrod, from qaisjp's fork.
+
 ## Purpose of this repo
 This project is a fork of MARS 4.5. Pull requests are very much welcomed.
 
@@ -14,7 +30,7 @@ This project is a fork of MARS 4.5. Pull requests are very much welcomed.
  - **Desktop**:
    - Save the jar file on the desktop
    - Run MARS by double-clicking the icon
-   
+
  - **Command line**:
    - Save the jar file in some folder
    - Rename the jar file to "Mars.jar" for convenience

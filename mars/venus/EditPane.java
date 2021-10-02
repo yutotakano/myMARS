@@ -11,6 +11,7 @@ import java.awt.*;
 import javax.swing.undo.*;
 import java.util.*;
 import java.io.*;
+import java.nio.file.*;
 
 /*
 Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
@@ -18,23 +19,23 @@ Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -236,7 +237,7 @@ public class EditPane extends JPanel implements Observer {
      */
 
    	/*  IMPLEMENTATION NOTE:
-   	 * Tried repeatedly to use StringTokenizer to count lines but got bad results 
+   	 * Tried repeatedly to use StringTokenizer to count lines but got bad results
    	 * on empty lines (consecutive delimiters) even when returning delimiter as token.
    	 * BufferedReader on StringReader seems to work better.
    	 */
@@ -261,6 +262,26 @@ public class EditPane extends JPanel implements Observer {
         return sourceCode.getText();
     }
 
+    /**
+     * Reload the source code by creating a new program and loading it, then
+     * setting the current program to the new one.
+     *
+     * https://github.com/saagarjha/MARS/commit/6ebfa7c4e2690f95ace68234b0b373908e416373?branch=6ebfa7c4e2690f95ace68234b0b373908e416373&diff=unified
+     */
+    public void reloadFile() {
+        try {
+            MIPSprogram program = new MIPSprogram();
+            program.readSource(getPathname());
+            StringBuilder source = new StringBuilder();
+            for (String line : (ArrayList<String>)program.getSourceList()) {
+                source.append(line);
+                source.append("\n");
+            }
+            setSourceCode(source.toString(), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Set the editing status for this EditPane's associated document.
@@ -302,6 +323,51 @@ public class EditPane extends JPanel implements Observer {
      */
     public void setPathname(String pathname) {
         this.fileStatus.setPathname(pathname);
+        // File parent = new File(pathname).getParentFile();
+        // if (parent == null) {
+        // 	return;
+        // }
+        // Path path = parent.toPath();
+        // try {
+        // 	WatchService watchService = path.getFileSystem().newWatchService();
+        // 	new Thread(new FileWatcher(watchService, this)).start();
+        // 	path.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
+        // } catch (Exception e) {
+        // 	e.printStackTrace();
+        // 	return;
+        // }
+    }
+
+    /**
+     * Taken from https://github.com/saagarjha/MARS/commit/6ebfa7c4e2690f95ace68234b0b373908e416373?branch=6ebfa7c4e2690f95ace68234b0b373908e416373&diff=unified.
+     * Not tested since it was disabled in the fork.
+     */
+    private static class FileWatcher implements Runnable {
+        private WatchService watchService;
+        private EditPane editPane;
+
+        public FileWatcher(WatchService watchService, EditPane editPane) {
+            this.watchService = watchService;
+            this.editPane = editPane;
+        }
+
+        public void run() {
+            try {
+              WatchKey key;
+              do {
+                  key = watchService.take();
+                  for (WatchEvent<?> event : key.pollEvents()) {
+                      if (editPane.getFilename().equals(((Path)event.context()).toString()) &&
+                          event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
+                          editPane.reloadFile();
+                      }
+                  }
+                  Thread.sleep(1000);
+                } while (key.reset());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -345,14 +411,14 @@ public class EditPane extends JPanel implements Observer {
     public UndoManager getUndoManager() {
         return sourceCode.getUndoManager();
     }
-   	
+
       /*       Note: these are invoked only when copy/cut/paste are used from the
    	               toolbar or menu or the defined menu Alt codes.  When
    						Ctrl-C, Ctrl-X or Ctrl-V are used, this code is NOT invoked
    						but the operation works correctly!
    				The "set visible" operations are used because clicking on the toolbar
    				icon causes both the selection highlighting AND the blinking cursor
-   				to disappear!  This does not happen when using menu selection or 
+   				to disappear!  This does not happen when using menu selection or
    				Ctrl-C/X/V
    	*/
 

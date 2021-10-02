@@ -11,23 +11,23 @@ Copyright (c) 2003-2006,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -64,7 +64,7 @@ public class ExecutePane extends JDesktopPane {
         this.mainUI = mainUI;
         // Although these are displayed in Data Segment, they apply to all three internal
         // windows within the Execute pane.  So they will be housed here.
-        addressDisplayBase = new NumberDisplayBaseChooser("Hexadecimal Addresses",
+        addressDisplayBase = new NumberDisplayBaseChooser("Hex Addresses",
                 Globals.getSettings().getBooleanSetting(Settings.DISPLAY_ADDRESSES_IN_HEX));
         valueDisplayBase = new NumberDisplayBaseChooser("Hexadecimal Values",
                 Globals.getSettings().getBooleanSetting(Settings.DISPLAY_VALUES_IN_HEX));//VenusUI.DEFAULT_NUMBER_BASE);
@@ -107,17 +107,19 @@ public class ExecutePane extends JDesktopPane {
 
         int fullWidth = this.getSize().width - this.getInsets().left - this.getInsets().right;
         int fullHeight = this.getSize().height - this.getInsets().top - this.getInsets().bottom;
-        int halfHeight = fullHeight / 2;
-        Dimension textDim = new Dimension((int) (fullWidth * .75), halfHeight);
-        Dimension dataDim = new Dimension((fullWidth), halfHeight);
-        Dimension lablDim = new Dimension((int) (fullWidth * .25), halfHeight);
-        Dimension textFullDim = new Dimension((fullWidth), halfHeight);
-        dataSegment.setBounds(0, textDim.height + 1, dataDim.width, dataDim.height);
+        int partialHeight = fullHeight / 3;
+		Dimension textDim = new Dimension((int)(fullWidth * .6), fullHeight - partialHeight);
+		Dimension dataDim = new Dimension((int)(fullWidth * .4), fullHeight - partialHeight);
+		Dimension labelDim = new Dimension((int)(fullWidth), partialHeight);
+		Dimension textFullDim = new Dimension((int)(fullWidth * .6), fullHeight);
+		Dimension dataFullDim = new Dimension((int)(fullWidth * .4), fullHeight);
         if (labelWindowVisible) {
             textSegment.setBounds(0, 0, textDim.width, textDim.height);
-            labelValues.setBounds(textDim.width + 1, 0, lablDim.width, lablDim.height);
+            dataSegment.setBounds(textDim.width, 0, dataDim.width, dataDim.height);
+			labelValues.setBounds(0, textDim.height, labelDim.width, labelDim.height);
         } else {
             textSegment.setBounds(0, 0, textFullDim.width, textFullDim.height);
+            dataSegment.setBounds(textFullDim.width, 0, dataFullDim.width, dataFullDim.height);
             labelValues.setBounds(0, 0, 0, 0);
         }
     }
