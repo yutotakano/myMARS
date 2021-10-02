@@ -436,7 +436,12 @@ public class VenusUI extends JFrame {
                     mainUI);
             helpAboutAction = new HelpAboutAction("About…", null,
                     "Information about Mars", null, null, mainUI);
-			Desktop.getDesktop().setAboutHandler((AboutHandler)helpAboutAction);
+
+            if (System.getProperty("os.name").contains("Mac")) {
+                // if mac, register the App Name -> About menu item
+                Desktop.getDesktop().setAboutHandler((AboutHandler)helpAboutAction);
+            }
+
         } catch (NullPointerException e) {
             System.out.println("Internal Error: images folder not found, or other null pointer exception while creating Action objects");
             e.printStackTrace();
@@ -613,6 +618,15 @@ public class VenusUI extends JFrame {
         JMenuItem helpHelp = new JMenuItem(helpHelpAction);
         helpHelp.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "Help16.png"))));//"Help16.gif"))));
         help.add(helpHelp);
+
+        // If not Mac, add the About menu item below Help.
+        // Macs use Desktop.getDesktop().setAboutHandler() in createActionObjects()
+        if (!System.getProperty("os.name").contains("Mac")) {
+            JMenuItem helpAbout = new JMenuItem(helpAboutAction);
+		    helpAbout.setIcon(new ImageIcon(tk.getImage(cs.getResource(Globals.imagesPath + "MyBlank16.gif"))));
+		    help.addSeparator();
+		    help.add(helpAbout);
+        }
 
         menuBar.add(file);
         menuBar.add(edit);
