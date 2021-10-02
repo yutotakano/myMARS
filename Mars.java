@@ -36,12 +36,21 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import java.awt.*;
 import javax.swing.*;
+import java.net.URL;
 
 class Mars {
     public static void main(String[] args) {
         System.setProperty("apple.laf.useScreenMenuBar", "true");
         System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Mars");
-        Taskbar.getTaskbar().setIconImage(new ImageIcon("images/MarsThumbnail.gif").getImage());
+        final URL imageResource = Mars.class.getClassLoader().getResource("images/mars.png");
+        try {
+            // set icon for macOS
+            Taskbar.getTaskbar().setIconImage(new ImageIcon(imageResource).getImage());
+        } catch (final UnsupportedOperationException e) {
+            System.out.println("The os does not support: 'taskbar.setIconImage'");
+        } catch (final SecurityException e) {
+            System.out.println("There was a security exception for: 'taskbar.setIconImage'");
+        }
         new mars.MarsLaunch(args);
     }
 }
