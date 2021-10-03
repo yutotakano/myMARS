@@ -48,17 +48,24 @@ class TextAreaPainter extends JComponent implements TabExpander {
         setCursor(Cursor.getPredefinedCursor(Cursor.TEXT_CURSOR));
 
         setFont(new Font("Courier New" /*"Monospaced"*/, Font.PLAIN, 14));
-        setForeground(Color.WHITE);
-        setBackground(Color.WHITE);
+
+        // https://github.com/aeris170/MARS-Theme-Engine/commit/2dbab43cc5c24ea6791f7380b9743a8e4b9bf92b
+        Color bg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_BG].getColor();
+		Color line = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_LINE].getColor();
+		Color selection = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_SELECTION].getColor();
+		Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
+
+		setForeground(fg);
+		setBackground(bg);
 
         tabSizeChars = defaults.tabSize;
         blockCaret = defaults.blockCaret;
         styles = defaults.styles;
         cols = defaults.cols;
         rows = defaults.rows;
-        caretColor = defaults.caretColor;
-        selectionColor = defaults.selectionColor;
-        lineHighlightColor = defaults.lineHighlightColor;
+        caretColor = fg; // was defaults.caretColor
+		selectionColor = selection; // was defaults.selectionColor
+		lineHighlightColor = line; // was defaults.lineHighlightColor
         lineHighlight = defaults.lineHighlight;
         bracketHighlightColor = defaults.bracketHighlightColor;
         bracketHighlight = defaults.bracketHighlight;
@@ -693,4 +700,18 @@ class TextAreaPainter extends JComponent implements TabExpander {
             }
         }
     }
+
+    public void updateColors() {
+		Color bg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_BG].getColor();
+		Color line = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_LINE].getColor();
+		Color selection = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_SELECTION].getColor();
+		Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
+
+		setForeground(fg);
+		setBackground(bg);
+
+		setCaretColor(fg);
+		setSelectionColor(selection);
+		setLineHighlightColor(line);
+	}
 }

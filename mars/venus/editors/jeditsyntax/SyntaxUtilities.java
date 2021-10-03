@@ -102,6 +102,9 @@ public class SyntaxUtilities {
         styles[Token.OPERATOR] = new SyntaxStyle(Color.black, false, true);
         styles[Token.INVALID] = new SyntaxStyle(Color.red, false, false);
         styles[Token.MACRO_ARG] = new SyntaxStyle(new Color(150, 150, 0), false, false);
+        styles[Token.EDITOR_BG] = new SyntaxStyle(new Color(255, 255, 255), false, false);
+        styles[Token.EDITOR_LINE] = new SyntaxStyle(new Color(238, 238, 238), false, false);
+        styles[Token.EDITOR_SELECTION] = new SyntaxStyle(new Color(204, 204, 255), false, false);
         return styles;
     }
 
@@ -127,6 +130,9 @@ public class SyntaxUtilities {
         styles[Token.OPERATOR] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.OPERATOR);
         styles[Token.INVALID] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.INVALID);
         styles[Token.MACRO_ARG] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.MACRO_ARG);
+        styles[Token.EDITOR_BG] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.EDITOR_BG);
+        styles[Token.EDITOR_LINE] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.EDITOR_LINE);
+        styles[Token.EDITOR_SELECTION] = Globals.getSettings().getEditorSyntaxStyleByPosition(Token.EDITOR_SELECTION);
         return styles;
     }
 

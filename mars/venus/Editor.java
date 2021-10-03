@@ -262,4 +262,14 @@ public class Editor {
         return editTabbedPane.editsSavedOrAbandoned();
     }
 
+    public void updateAll() {
+		int size = editTabbedPane.getTabCount();
+		for (int i = 0; i < size; i++) {
+			if (editTabbedPane.getComponentAt(i) instanceof EditPane) {
+				EditPane p = (EditPane) editTabbedPane.getComponentAt(i);
+				p.updateColors();
+			}
+		}
+	}
+
 }

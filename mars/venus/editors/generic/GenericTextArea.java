@@ -369,5 +369,6 @@ public class GenericTextArea extends JTextArea implements MARSTextEditingArea {
     //
     /////////////////////////////  End Find/Replace methods //////////////////////////
 
-
+    @Override
+    public void updateColors() {}
 }

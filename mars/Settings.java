@@ -2,6 +2,7 @@ package mars;
 
 import mars.util.*;
 import mars.venus.editors.jeditsyntax.*;
+import mars.venus.editors.jeditsyntax.tokenmarker.Token;
 
 import java.util.*;
 import java.util.prefs.*;
@@ -444,14 +445,17 @@ public class Settings extends Observable {
         saveEditorSyntaxStyle(index);
     }
 
+    // For syntax styles, use getSyntaxColorValueByPosition instead of
+    // getColorValueByPosition. Crude fix from https://github.com/aeris170/MARS-Theme-Engine/commit/2dbab43cc5c24ea6791f7380b9743a8e4b9bf92b
+    // implemented by yutotakano
     public SyntaxStyle getEditorSyntaxStyleByPosition(int index) {
-        return new SyntaxStyle(getColorValueByPosition(index, syntaxStyleColorSettingsValues),
+        return new SyntaxStyle(getSyntaxColorValueByPosition(index, syntaxStyleColorSettingsValues),
                 syntaxStyleItalicSettingsValues[index],
                 syntaxStyleBoldSettingsValues[index]);
     }
 
     public SyntaxStyle getDefaultEditorSyntaxStyleByPosition(int index) {
-        return new SyntaxStyle(getColorValueByPosition(index, defaultSyntaxStyleColorSettingsValues),
+        return new SyntaxStyle(getSyntaxColorValueByPosition(index, defaultSyntaxStyleColorSettingsValues),
                 defaultSyntaxStyleItalicSettingsValues[index],
                 defaultSyntaxStyleBoldSettingsValues[index]);
     }
@@ -1381,6 +1385,21 @@ public class Settings extends Observable {
             try {
                 color = Color.decode(values[position]);
             } catch (NumberFormatException ignored) {
+                System.out.println("error");
+            }
+        }
+        return color;
+    }
+
+    // https://github.com/aeris170/MARS-Theme-Engine/commit/2dbab43cc5c24ea6791f7380b9743a8e4b9bf92b
+    // Use only for syntax style!!
+    private Color getSyntaxColorValueByPosition(final int position, final String[] values) {
+        Color color = null;
+        if (position >= 0 && position < Token.ID_COUNT) {
+            try {
+            color = Color.decode(values[position]);
+            } catch (final NumberFormatException nfe) {
+            color = null;
             }
         }
         return color;

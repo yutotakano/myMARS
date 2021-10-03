@@ -403,5 +403,7 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
     //
     //////////////////////////////////////////////////////////////////
 
+    @Override
+	  public void updateColors() { painter.updateColors(); }
 
 }

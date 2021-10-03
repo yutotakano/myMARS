@@ -690,5 +690,6 @@ public class EditPane extends JPanel implements Observer {
                 : new Font(sourceFont.getFamily(), Font.PLAIN, sourceFont.getSize());
     }
 
+    public void updateColors() { sourceCode.updateColors(); }
 
 }

@@ -17,23 +17,23 @@ Copyright (c) 2003-2011,  Pete Sanderson and Kenneth Vollmar
 Developed by Pete Sanderson (psanderson@otterbein.edu)
 and Kenneth Vollmar (kenvollmar@missouristate.edu)
 
-Permission is hereby granted, free of charge, to any person obtaining 
-a copy of this software and associated documentation files (the 
-"Software"), to deal in the Software without restriction, including 
-without limitation the rights to use, copy, modify, merge, publish, 
-distribute, sublicense, and/or sell copies of the Software, and to 
-permit persons to whom the Software is furnished to do so, subject 
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject
 to the following conditions:
 
-The above copyright notice and this permission notice shall be 
+The above copyright notice and this permission notice shall be
 included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
-ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION 
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 (MIT license, http://www.opensource.org/licenses/mit-license.html)
@@ -121,6 +121,9 @@ public class SettingsEditorAction extends GuiAction {
 
         private int initialEditorTabSize, initialCaretBlinkRate, initialPopupGuidance;
         private boolean initialLineHighlighting, initialGenericTextEditor, initialAutoIndent;
+
+        private int editorLineRow = -1;
+		private int editorSelRow = -1;
 
         EditorFontDialog(Frame owner, Font font) {
             super(owner, "Text Editor Settings", font);
@@ -226,6 +229,7 @@ public class SettingsEditorAction extends GuiAction {
                     break;
                 }
             }
+            mainUI.getEditor().updateAll();
         }
 
         // User has clicked "Reset" button.  Put everything back to initial state.
@@ -390,6 +394,17 @@ public class SettingsEditorAction extends GuiAction {
                     samples[count].setToolTipText(SAMPLE_TOOL_TIP_TEXT);
                     foregroundButtons[count] = new ColorSelectButton(); // defined in SettingsHighlightingAction
                     foregroundButtons[count].addActionListener(new ForegroundChanger(count));
+                    if (i == Token.EDITOR_BG) {
+						foregroundButtons[count].addActionListener(new BackgroundChanger(count));
+					} else if (i == Token.EDITOR_LINE) {
+						foregroundButtons[count].addActionListener(new ForegroundChanger(count));
+						editorLineRow = count;
+					} else if (i == Token.EDITOR_SELECTION) {
+						foregroundButtons[count].addActionListener(new ForegroundChanger(count));
+						editorSelRow = count;
+					} else {
+						foregroundButtons[count].addActionListener(new ForegroundChanger(count));
+					}
                     foregroundButtons[count].setToolTipText(FOREGROUND_TOOL_TIP_TEXT);
                     BoldItalicChanger boldItalicChanger = new BoldItalicChanger(count);
                     bold[count] = new JToggleButton(BOLD_BUTTON_TOOL_TIP_TEXT, false);
@@ -400,9 +415,18 @@ public class SettingsEditorAction extends GuiAction {
                     italic[count].setFont(italicFont);
                     italic[count].addActionListener(boldItalicChanger);
                     italic[count].setToolTipText(ITALIC_TOOL_TIP_TEXT);
+                    if (i == Token.EDITOR_BG || i == Token.EDITOR_LINE || i == Token.EDITOR_SELECTION) {
+						samples[count].setVisible(false);
+						bold[count].setVisible(false);
+						italic[count].setVisible(false);
+					}
                     label[count] = labels[i];
                     useDefault[count] = new JCheckBox();
-                    useDefault[count].addItemListener(new DefaultChanger(count));
+                    if (i == Token.EDITOR_BG) {
+						useDefault[count].addItemListener(new DefaultChangerEditorBG(count));
+					} else {
+						useDefault[count].addItemListener(new DefaultChanger(count));
+					}
                     useDefault[count].setToolTipText(DEFAULT_TOOL_TIP_TEXT);
                     count++;
                 }
@@ -446,9 +470,12 @@ public class SettingsEditorAction extends GuiAction {
         // Set or reset the changeable features of component for syntax style
         private void initializeSyntaxStyleChangeables() {
             for (int count = 0; count < samples.length; count++) {
-                int i = syntaxStyleIndex[count];
+                final int i = syntaxStyleIndex[count];
                 samples[count].setFont(previewFont);
                 samples[count].setForeground(initialStyles[i].getColor());
+                if (count != editorLineRow && count != editorSelRow) {
+					samples[count].setBackground(initialStyles[Token.EDITOR_BG].getColor());
+				}
                 foregroundButtons[count].setBackground(initialStyles[i].getColor());
                 foregroundButtons[count].setEnabled(true);
                 currentStyles[count] = initialStyles[i];
@@ -522,7 +549,8 @@ public class SettingsEditorAction extends GuiAction {
         //  Class that handles click on the foreground selection button
         //
         private class ForegroundChanger implements ActionListener {
-            private final int row;
+            protected final int row;
+			protected Color selection;
 
             ForegroundChanger(int pos) {
                 row = pos;
@@ -530,10 +558,10 @@ public class SettingsEditorAction extends GuiAction {
 
             public void actionPerformed(ActionEvent e) {
                 JButton button = (JButton) e.getSource();
-                Color newColor = JColorChooser.showDialog(null, "Set Text Color", button.getBackground());
-                if (newColor != null) {
-                    button.setBackground(newColor);
-                    samples[row].setForeground(newColor);
+                selection = JColorChooser.showDialog(null, "Set Text Color", button.getBackground());
+				if (selection != null) {
+					button.setBackground(selection);
+					samples[row].setForeground(selection);
                 }
                 currentStyles[row] = new SyntaxStyle(button.getBackground(),
                         italic[row].isSelected(), bold[row].isSelected());
@@ -542,11 +570,31 @@ public class SettingsEditorAction extends GuiAction {
         }
 
         /////////////////////////////////////////////////////////////////
+		//
+		//  Class that handles click on only the editor background selection button
+		//
+		private class BackgroundChanger extends ForegroundChanger {
+
+			public BackgroundChanger(final int pos) { super(pos); }
+
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				super.actionPerformed(e);
+				for (JLabel c : samples) {
+					if (c.getText().equals("")) {
+						continue;
+					}
+					c.setBackground(selection);
+				}
+			}
+		}
+
+        /////////////////////////////////////////////////////////////////
         //
         // Class that handles action (check, uncheck) on the Default checkbox.
         //
         private class DefaultChanger implements ItemListener {
-            private final int row;
+            protected final int row;
 
             DefaultChanger(int pos) {
                 row = pos;
@@ -581,6 +629,33 @@ public class SettingsEditorAction extends GuiAction {
                 syntaxStylesAction = true;
             }
         }
+
+        /////////////////////////////////////////////////////////////////
+		//
+		// Class that handles action (check, uncheck) on the Default checkbox.
+		//
+		private class DefaultChangerEditorBG extends DefaultChanger {
+
+			public DefaultChangerEditorBG(final int pos) { super(pos); }
+
+			@Override
+			public void itemStateChanged(final ItemEvent e) {
+				super.itemStateChanged(e);
+				Color bg;
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+					final SyntaxStyle defaultStyle = defaultStyles[syntaxStyleIndex[row]];
+					bg = defaultStyle.getColor();
+				} else {
+					bg = currentStyles[row].getColor();
+				}
+				for (int i = 0; i < samples.length; i++) {
+					if (samples[i].getText().equals("")) {
+						continue;
+					}
+					samples[i].setBackground(bg);
+				}
+			}
+		}
     }
 
 }
