@@ -13,7 +13,7 @@ Things this fork does better than the original MARS V4.5:
 - Also shown above: a Reload menu button to reload the open file without closing and opening again. (from saagarjha's fork)
 - Change hardcoded Launch Screen shown time from 2 seconds to 250ms (from qaisjp's fork)
 - Change the dock icon, left is new (from saagarjha's fork)
-  - <img alt="Image showing dock icon" alt="https://i.imgur.com/SftSNZR.png" height="100px" />
+  - <img alt="Image showing dock icon" src="https://i.imgur.com/SftSNZR.png" height="100px" />
 - Add `@Deprecated` to all deprecated functions, removing the warnings during compilation (from saagarjha's fork).
 - Use the native file dialog for macOS, left is new (from saagarjha's fork)
   - ![Image showing native file opener](https://i.imgur.com/xdwFFId.png)
