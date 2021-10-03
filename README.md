@@ -20,8 +20,10 @@ Things this fork does better than the original MARS V4.5:
 - Show UTF-16 encoding of register values (from qaisjp's fork)
 - Add "CreateMarsApp.sh", which creates an .app package for macOS to copy to your Applications folder (from saagarjha's fork)
 - Fix Windows "CreateMarsJar.bat" not working, and make output cleaner.
-- Make dark theme the default. Theme selector still WIP.
+- Make dark theme default, theme selector still WIP.
   - <img alt="Image showing darkness" src="https://i.imgur.com/hZyeH2i.png" height="300"/>
+- Add ability to select background, line highlight, and selection color (from aeris170/MARS-Theme-Engine).
+- Add ability to select foreground color.
 - And a whole lot of other fixes by Vidminas, qaisjp, JonMoncrieff, and ZayadNimrod, from qaisjp's fork.
 
 ## Purpose of this repo
