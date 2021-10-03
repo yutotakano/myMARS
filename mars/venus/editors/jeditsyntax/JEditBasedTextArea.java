@@ -66,6 +66,22 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
         return getPainter().getFont();
     }
 
+    public void setBackground(Color color) {
+        getPainter().setBackground(color);
+    }
+
+    public Color getBackground() {
+        return getPainter().getBackground();
+    }
+
+    public void setForeground(Color color) {
+        getPainter().setForeground(color);
+    }
+
+    public Color getForeground() {
+        return getPainter().getForeground();
+    }
+
 
 // 		public void repaint() {		 getPainter().repaint();		 }
 // 		 public Dimension getSize() { return painter.getSize(); }
@@ -167,7 +183,7 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
     //
     public void setSourceCode(String s, boolean editable) {
         this.setText(s);
-        this.setBackground((editable) ? Color.WHITE : Color.GRAY);
+        this.setBackground((editable) ? new Color(0x3b3f41) : new Color(0x515353));
         this.setEditable(editable);
         this.setEnabled(editable);
         //this.getCaret().setVisible(editable);
@@ -242,7 +258,7 @@ public class JEditBasedTextArea extends JEditTextArea implements MARSTextEditing
         int nextPosn;
         nextPosn = nextIndex(sourceCode.getText(), find, findPosn, caseSensitive);
         if (nextPosn >= 0) {
-            sourceCode.requestFocus(); // guarantees visibility of the blue highlight 
+            sourceCode.requestFocus(); // guarantees visibility of the blue highlight
             sourceCode.setSelectionStart(nextPosn); // position cursor at word start
             sourceCode.setSelectionEnd(nextPosn + find.length());
             // Need to repeat start due to quirk in JEditTextArea implementation of setSelectionStart.
