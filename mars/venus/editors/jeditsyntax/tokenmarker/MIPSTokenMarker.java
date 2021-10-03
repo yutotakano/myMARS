@@ -45,6 +45,7 @@ public class MIPSTokenMarker extends TokenMarker {
             tokenLabels[Token.KEYWORD3] = "Register";
             tokenLabels[Token.INVALID] = "In-progress, invalid";
             tokenLabels[Token.MACRO_ARG] = "Macro parameter";
+            tokenLabels[Token.EDITOR_FG] = "Foreground";
             tokenLabels[Token.EDITOR_BG] = "Background";
             tokenLabels[Token.EDITOR_LINE] = "Line";
             tokenLabels[Token.EDITOR_SELECTION] = "Selection";
@@ -64,6 +65,7 @@ public class MIPSTokenMarker extends TokenMarker {
             tokenExamples[Token.KEYWORD3] = "$zero";
             tokenExamples[Token.INVALID] = "\"Regi";
             tokenExamples[Token.MACRO_ARG] = "%arg";
+            tokenExamples[Token.EDITOR_FG] = "";
             tokenExamples[Token.EDITOR_BG] = "";
             tokenExamples[Token.EDITOR_LINE] = "";
             tokenExamples[Token.EDITOR_SELECTION] = "";

@@ -104,24 +104,29 @@ public class Token {
     public static final byte MACRO_ARG = 11;
 
     /**
-     * Editor background color token. Added for MARS 4.5.1Unofficial.
+     * Editor background color token. Added by yutotakano.
      */
-    public static final byte EDITOR_BG = 12;
+    public static final byte EDITOR_FG = 12;
 
     /**
-     * Editor selected line background color token. Added for MARS 4.5.1Unofficial.
+     * Editor background color token. Added by aeris170/MARS-Theme-Engine for MARS 4.5.1Unofficial.
      */
-    public static final byte EDITOR_LINE = 13;
+    public static final byte EDITOR_BG = 13;
 
     /**
-     * Editor selection color token. Added for MARS 4.5.1Unofficial.
+     * Editor selected line background color token. Added by aeris170/MARS-Theme-Engine for MARS 4.5.1Unofficial.
      */
-    public static final byte EDITOR_SELECTION = 14;
+    public static final byte EDITOR_LINE = 14;
+
+    /**
+     * Editor selection color token. Added by aeris170/MARS-Theme-Engine for MARS 4.5.1Unofficial.
+     */
+    public static final byte EDITOR_SELECTION = 15;
 
     /**
      * The total number of defined token ids.
      */
-    public static final byte ID_COUNT = 15;
+    public static final byte ID_COUNT = 16;
 
     /**
      * The first id that can be used for internal state

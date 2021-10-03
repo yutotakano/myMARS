@@ -49,11 +49,13 @@ class TextAreaPainter extends JComponent implements TabExpander {
 
         setFont(new Font("Courier New" /*"Monospaced"*/, Font.PLAIN, 14));
 
+        // fg is added by yutotakano
+        Color fg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_FG].getColor();
         // https://github.com/aeris170/MARS-Theme-Engine/commit/2dbab43cc5c24ea6791f7380b9743a8e4b9bf92b
         Color bg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_BG].getColor();
 		Color line = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_LINE].getColor();
 		Color selection = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_SELECTION].getColor();
-		Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
+		// Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
 
 		setForeground(fg);
 		setBackground(bg);
@@ -702,10 +704,11 @@ class TextAreaPainter extends JComponent implements TabExpander {
     }
 
     public void updateColors() {
+		Color fg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_FG].getColor();
 		Color bg = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_BG].getColor();
 		Color line = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_LINE].getColor();
 		Color selection = SyntaxUtilities.getCurrentSyntaxStyles()[Token.EDITOR_SELECTION].getColor();
-		Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
+		// Color fg = new Color(255 - bg.getRed(), 255 - bg.getGreen(), 255 - bg.getBlue());
 
 		setForeground(fg);
 		setBackground(bg);
