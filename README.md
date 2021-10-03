@@ -9,11 +9,11 @@ This is a fork of [qaisjp/myMARS](https://github.com/qaisjp/myMARS) which contai
 Things this fork does better than the original MARS V4.5:
 
 - Use native macOS menu bar for actions instead of clunky Java UI (from saagarjha's fork).
-  - ![Image showing macOS menu bar](https://i.imgur.com/nRV9XgN.png)
+  - <img alt="Image showing macOS menu bar" src="https://i.imgur.com/nRV9XgN.png" height="200" />
 - Also shown above: a Reload menu button to reload the open file without closing and opening again. (from saagarjha's fork)
 - Change hardcoded Launch Screen shown time from 2 seconds to 250ms (from qaisjp's fork)
 - Change the dock icon, left is new (from saagarjha's fork)
-  - ![Image showing dock icon](https://i.imgur.com/SftSNZR.png)
+  - <img alt="Image showing dock icon" alt="https://i.imgur.com/SftSNZR.png" height="100px" />
 - Add `@Deprecated` to all deprecated functions, removing the warnings during compilation (from saagarjha's fork).
 - Use the native file dialog for macOS, left is new (from saagarjha's fork)
   - ![Image showing native file opener](https://i.imgur.com/xdwFFId.png)
