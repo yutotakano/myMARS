@@ -4,7 +4,7 @@
 
 MARS has been jointly developed by [Pete Sanderson][4] (programming) and [Ken Vollmar][5] (details and paperwork).
 
-This is a fork of [qaisjp/myMARS](https://github.com/qaisjp/myMARS) which contains fixes and nifty additions (like UTF-16 hints), with changes merged from [saagarjha/MARS](https://github.com/saagarjha/MARS) which contains Mac-specific fixes, and personal changes added on to add back Windows compatibility.
+This is a fork of [qaisjp/myMARS](https://github.com/qaisjp/myMARS) which contains fixes and nifty additions (like UTF-16 hints), with changes merged from [saagarjha/MARS](https://github.com/saagarjha/MARS) which contains Mac-specific fixes, and [aeris170/MARS-Theme-Engine](https://github.com/aeris170/MARS-Theme-Engine) which contains a theme engine, and personal changes added on to add back Windows compatibility.
 
 Things this fork does better than the original MARS V4.5:
 
@@ -20,10 +20,10 @@ Things this fork does better than the original MARS V4.5:
 - Show UTF-16 encoding of register values (from qaisjp's fork)
 - Add "CreateMarsApp.sh", which creates an .app package for macOS to copy to your Applications folder (from saagarjha's fork)
 - Fix Windows "CreateMarsJar.bat" not working, and make output cleaner.
-- Make dark theme default, theme selector still WIP.
-  - <img alt="Image showing darkness" src="https://i.imgur.com/hZyeH2i.png" height="300"/>
-- Add ability to select background, line highlight, and selection color (from aeris170/MARS-Theme-Engine).
+- Add ability to select background, line highlight, and selection color (from aeris170's fork).
 - Add ability to select foreground color.
+- Add ability to select from a wide variety of common color themes (from aeris170's fork).
+  - <img alt="Image showing darkness" src="https://i.imgur.com/hZyeH2i.png" height="300"/>
 - And a whole lot of other fixes by Vidminas, qaisjp, JonMoncrieff, and ZayadNimrod, from qaisjp's fork.
 
 ## Purpose of this repo
