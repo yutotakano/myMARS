@@ -29,7 +29,7 @@ public class SettingsThemesAction extends GuiAction {
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		themesDialog = new JDialog(Globals.getGui(), "Mars Themes", true);
+		themesDialog = new JDialog(Globals.getGui(), "MARS Themes", true);
 		themesDialog.setContentPane(buildDialogPanel());
 		themesDialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		themesDialog.addWindowListener(new WindowAdapter() {
