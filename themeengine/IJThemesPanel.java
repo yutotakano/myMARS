@@ -442,7 +442,7 @@ public class IJThemesPanel extends JPanel {
 			updateThemesList(); //i'm a simple man, i'm lazy
 		} else { //apply java default laf
 			try {
-				UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
 					| UnsupportedLookAndFeelException ex) {
 				ex.printStackTrace();
