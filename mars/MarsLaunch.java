@@ -11,7 +11,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.plaf.*;
 
-import com.formdev.flatlaf.FlatDarkLaf;
+import themeengine.ThemeEngine;
 
 /*
 Copyright (c) 2003-2012,  Pete Sanderson and Kenneth Vollmar
@@ -132,7 +132,7 @@ public class MarsLaunch {
         boolean gui = (args.length == 0);
         Globals.initialize(gui);
         if (gui) {
-            launchIDE();
+            launchIDE(args);
         } else { // running from command line.
             // assure command mode works in headless environment (generates exception if not)
             System.setProperty("java.awt.headless", "true");
@@ -226,7 +226,7 @@ public class MarsLaunch {
     // There are no command arguments, so run in interactive mode by
     // launching the GUI-fronted integrated development environment.
 
-    private void launchIDE() {
+    private void launchIDE(String[] args) {
         // System.setProperty("apple.laf.useScreenMenuBar", "true"); // Puts MARS menu on Mac OS menu bar
         new MarsSplashScreen(splashDuration).showSplash();
         System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -241,13 +241,13 @@ public class MarsLaunch {
 		    }
 
         SwingUtilities.invokeLater(
-                () -> {
-                    //Turn off metal's use of bold fonts
-                    //UIManager.put("swing.boldMetal", Boolean.FALSE);
-                    FlatDarkLaf.setup();
-                    UIManager.put( "TabbedPane.showTabSeparators", true );
-                    new VenusUI("MARS " + Globals.version);
-                });
+            () -> {
+                //Turn off metal's use of bold fonts
+                //UIManager.put("swing.boldMetal", Boolean.FALSE);
+                ThemeEngine.setup(args);
+                UIManager.put( "TabbedPane.showTabSeparators", true );
+                new VenusUI("MARS " + Globals.version);
+            });
     }
 
 

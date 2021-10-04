@@ -14,7 +14,6 @@ int main() {
 ./CreateMarsJar.sh
 mkdir -p MARS.app/Contents/Resources/Java
 cp Mars.jar MARS.app/Contents/Resources/Java
-cp -r lib MARS.app/Contents/Resources/Java
 echo "APPL????" > MARS.app/Contents/PkgInfo
 generate-app-icons images/mars.png -m -f MARS.iconset
 iconutil -c icns MARS.iconset

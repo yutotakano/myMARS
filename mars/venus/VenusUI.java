@@ -84,7 +84,7 @@ public class VenusUI extends JFrame {
             settingsExtendedAction, settingsAssembleOnOpenAction, settingsAssembleAllAction,
             settingsWarningsAreErrorsAction, settingsStartAtMainAction, settingsProgramArgumentsAction,
             settingsDelayedBranchingAction, settingsExceptionHandlerAction, settingsEditorAction,
-            settingsHighlightingAction, settingsMemoryConfigurationAction, settingsSelfModifyingCodeAction;
+            settingsHighlightingAction, settingsThemesAction, settingsMemoryConfigurationAction, settingsSelfModifyingCodeAction;
     private Action helpHelpAction, helpAboutAction;
 
 
@@ -418,6 +418,11 @@ public class VenusUI extends JFrame {
                     "View and modify Execute Tab highlighting colors",
                     null, null,
                     mainUI);
+            settingsThemesAction = new SettingsThemesAction("Themes…",
+                    null,
+                    "View and modify MARS themes",
+                    null, null,
+                    mainUI);
             settingsExceptionHandlerAction = new SettingsExceptionHandlerAction("Exception Handler…",
                     null,
                     "If set, the specified exception handler file will be included in all Assemble operations.",
@@ -591,6 +596,7 @@ public class VenusUI extends JFrame {
         settingsProgramArguments.setSelected(Globals.getSettings().getBooleanSetting(Settings.PROGRAM_ARGUMENTS));
         JMenuItem settingsEditor = new JMenuItem(settingsEditorAction);
         JMenuItem settingsHighlighting = new JMenuItem(settingsHighlightingAction);
+        JMenuItem settingsThemes = new JMenuItem(settingsThemesAction);
         JMenuItem settingsExceptionHandler = new JMenuItem(settingsExceptionHandlerAction);
         JMenuItem settingsMemoryConfiguration = new JMenuItem(settingsMemoryConfigurationAction);
 
@@ -611,6 +617,7 @@ public class VenusUI extends JFrame {
         settings.addSeparator();
         settings.add(settingsEditor);
         settings.add(settingsHighlighting);
+        settings.add(settingsThemes);
         settings.add(settingsExceptionHandler);
         settings.add(settingsMemoryConfiguration);
 
