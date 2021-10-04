@@ -229,16 +229,15 @@ public class MarsLaunch {
     private void launchIDE(String[] args) {
         // System.setProperty("apple.laf.useScreenMenuBar", "true"); // Puts MARS menu on Mac OS menu bar
         new MarsSplashScreen(splashDuration).showSplash();
-        System.setProperty("apple.laf.useScreenMenuBar", "true");
-		    Enumeration keys = UIManager.getDefaults().keys();
-		    while (keys.hasMoreElements()) {
-            Object key = keys.nextElement();
-            Object value = UIManager.get(key);
-            if (value instanceof FontUIResource) {
-                FontUIResource resource = (FontUIResource)value;
-                UIManager.put(key, new FontUIResource(".SF NS Text", resource.getStyle(), resource.getSize()));
-            }
-		    }
+        Enumeration keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+        Object key = keys.nextElement();
+        Object value = UIManager.get(key);
+        if (value instanceof FontUIResource) {
+            FontUIResource resource = (FontUIResource)value;
+            UIManager.put(key, new FontUIResource(".SF NS Text", resource.getStyle(), resource.getSize()));
+        }
+        }
 
         SwingUtilities.invokeLater(
             () -> {
