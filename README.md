@@ -26,6 +26,12 @@ The following is a comprehensive list of things this fork attempts to improve up
   - <img alt="Image showing darkness" src="https://i.imgur.com/hZyeH2i.png" height="300"/>
 - And a whole lot of other fixes by Vidminas, qaisjp, JonMoncrieff, and ZayadNimrod, from qaisjp's fork.
 
+## Roadmap
+
+- Add a Recently Opened file list
+- Restore open files upon quitting and reopening
+- Synchronise editor colors with the selected theme
+
 ## Purpose of this repo
 
 This project is a fork of MARS 4.5. Pull requests are very much welcomed.
