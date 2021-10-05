@@ -1,12 +1,12 @@
 # MARS Assembler
 
-[MARS][1] is a lightweight interactive development environment (IDE) for programming in MIPS assembly language, intended for educational-level use with Patterson and Hennessy's Computer Organization and Design.
+[MARS][1], MIPS Assembler and Runtime Simulator, is a lightweight interactive development environment (IDE) for programming in MIPS assembly language, intended for educational-level use with Patterson and Hennessy's Computer Organization and Design.
 
 MARS has been jointly developed by [Pete Sanderson][4] (programming) and [Ken Vollmar][5] (details and paperwork).
 
 This is a fork of [qaisjp/myMARS](https://github.com/qaisjp/myMARS) which contains fixes and nifty additions (like UTF-16 hints), with changes merged from [saagarjha/MARS](https://github.com/saagarjha/MARS) which contains Mac-specific fixes, and [aeris170/MARS-Theme-Engine](https://github.com/aeris170/MARS-Theme-Engine) which contains a theme engine, and personal changes added on to add back Windows compatibility.
 
-Things this fork does better than the original MARS V4.5:
+The following is a comprehensive list of things this fork attempts to improve upon MARS V4.5:
 
 - Use native macOS menu bar for actions instead of clunky Java UI (from saagarjha's fork).
   - <img alt="Image showing macOS menu bar" src="https://i.imgur.com/nRV9XgN.png" height="200" />
@@ -22,7 +22,7 @@ Things this fork does better than the original MARS V4.5:
 - Fix Windows "CreateMarsJar.bat" not working, and make output cleaner.
 - Add ability to select background, line highlight, and selection color (from aeris170's fork).
 - Add ability to select foreground color.
-- Add ability to select from a wide variety of common color themes (from aeris170's fork).
+- Add a Theme Engine, and the ability to select from a wide variety of common color themes (from aeris170's fork).
   - <img alt="Image showing darkness" src="https://i.imgur.com/hZyeH2i.png" height="300"/>
 - And a whole lot of other fixes by Vidminas, qaisjp, JonMoncrieff, and ZayadNimrod, from qaisjp's fork.
 
