@@ -66,11 +66,12 @@ This project is a fork of MARS 4.5. Pull requests are very much welcomed.
 - Release `myMARS.zip` with `vYYYY-MM-DD` as the version tag
 
 ## License
-[MIT][2]. Check the [LICENSE][3] file. All the credits go to the original developers.
+
+[MIT][2]: Check the [LICENSE.md][3] file for detailed licensing text.
 
   [1]: http://courses.missouristate.edu/KenVollmar/MARS/index.htm
   [2]: http://www.opensource.org/licenses/mit-license.html
-  [3]: https://github.com/adolphenom/MARS_Assembler/blob/master/LICENSE
+  [3]: https://github.com/yutotakano/myMARS/blob/master/LICENSE.md
   [4]: http://faculty.otterbein.edu/PSanderson/
   [5]: http://courses.missouristate.edu/KenVollmar/
   [6]: http://courses.missouristate.edu/KenVollmar/MARS/download.htm
