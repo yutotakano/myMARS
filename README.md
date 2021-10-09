@@ -39,7 +39,7 @@ This project is a fork of MARS 4.5. Pull requests are very much welcomed.
 ## Documentation (included in the repo)
 
  - Go to the [documentation][7].
- - In order to run or compile this project **you must have JRE/JDK 10 (or later) installed on your computer**.
+ - In order to run or compile this project **you must have JRE/JDK 11 (or later) installed on your computer**.
 
 ## How to run MARS
 
